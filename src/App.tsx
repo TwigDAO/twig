@@ -99,14 +99,20 @@ const App: React.FC = () => {
     },
   ]);
   const [generatedCalldata, setGeneratedCalldata] = useState<string>("");
+  const [generatedTo, setTo] = useState<string>("");
+  const [generatedValue, setValue] = useState<string>("");
   const { address, isConnected } = useAccount();
   const { sendTransaction } = useSendTransaction();
 
   const handleAISubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // FIXME call AI api here
     const mockCalldata =
-      "0x12345678" + aiInput.split(" ").join("").toLowerCase();
+      "0xa9059cbb0000000000000000000000009f885238277810fb5eec5a2601f2e19b8f875fa600000000000000000000000000000000000000000000000000000000000004d2";
     setGeneratedCalldata(mockCalldata);
+    setTo("0xdAC17F958D2ee523a2206206994597C13D831ec7");
+    setValue("0");
   };
 
   const handleConfirm = async (calldata: string) => {
@@ -117,9 +123,9 @@ const App: React.FC = () => {
 
     try {
       sendTransaction({
-        to: "0xRecipientAddress" as const, // Replace with actual EntryPoint for ERC-4337
-        data: calldata as `0x${string}`,
-        value: BigInt(0),
+        to: generatedTo,
+        data: generatedCalldata,
+        value: generatedValue,
       });
       console.log("Transaction sent successfully");
     } catch (error) {
@@ -178,7 +184,7 @@ const App: React.FC = () => {
   return (
     <div className="App">
       <header>
-        <h1>Crypto AI Assistant</h1>
+        <h1>Twig</h1>
         <div className="wallet-connect">
           <ConnectButton />
         </div>
@@ -212,6 +218,8 @@ const App: React.FC = () => {
 
           {generatedCalldata && (
             <div className="result">
+              <p>To : {generatedTo}</p>
+              <p>Value: {generatedValue}</p>
               <p>Generated Calldata: {generatedCalldata}</p>
               <button onClick={() => handleConfirm(generatedCalldata)}>
                 Confirm Transaction

@@ -1,9 +1,15 @@
 // src/wagmi.config.ts
 import { getDefaultConfig } from "@rainbow-me/rainbowkit";
-import { mainnet, polygon, optimism } from "wagmi/chains";
+import {
+  mainnet,
+  zircuitGarfieldTestnet,
+  zircuit,
+  polygon,
+  optimism,
+} from "wagmi/chains";
 
 export const config = getDefaultConfig({
   appName: "Twig",
   projectId: "51c7a03ad29fbe9db19e8dbaa78c877b",
-  chains: [mainnet, polygon, optimism],
+  chains: [mainnet, zircuitGarfieldTestnet, zircuit, polygon, optimism],
 });
