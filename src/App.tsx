@@ -25,6 +25,13 @@ interface UserOperation {
 
 const ai = new GoogleGenAI({});
 
+interface GeneratedTxData {
+  to: string;
+  value: string;
+  calldata: string;
+  eip7702Delegate: string;
+}
+
 // Field descriptions for display
 const userOpFields: {
   key: keyof UserOperation;
@@ -101,9 +108,8 @@ const App: React.FC = () => {
       paymasterAndData: "0x",
     },
   ]);
-  const [generatedCalldata, setGeneratedCalldata] = useState<string>("");
-  const [generatedTo, setTo] = useState<string>("");
-  const [generatedValue, setValue] = useState<string>("");
+  const [generatedTxData, setGeneratedTxData] =
+    useState<GeneratedTxData | null>(null);
   const { address, isConnected } = useAccount();
   const { sendTransaction } = useSendTransaction();
   const client = useClient(); // Get the client
@@ -122,12 +128,17 @@ const App: React.FC = () => {
     let result = lines.join("\n");
     console.log(result);
     let resultJson = JSON.parse(result);
-    setGeneratedCalldata(resultJson.data);
-    setTo(resultJson.to);
-    setValue(resultJson.value);
+
+    const genData: GeneratedTxData = {
+      to: resultJson.to,
+      value: resultJson.value,
+      calldata: resultJson.data,
+      eip7702Delegate: "batch.sol",
+    };
+    setGeneratedTxData(genData);
   };
 
-  const handleConfirm = async (calldata: string) => {
+  const handleConfirm = async (genTxData: GeneratedTxData) => {
     if (!isConnected) {
       alert("Please connect your wallet first");
       return;
@@ -135,9 +146,9 @@ const App: React.FC = () => {
 
     try {
       sendTransaction({
-        to: generatedTo,
-        data: generatedCalldata,
-        value: generatedValue,
+        to: genTxData.to,
+        data: genTxData.calldata,
+        value: en.value,
       });
       console.log("Transaction sent successfully");
     } catch (error) {
@@ -225,16 +236,33 @@ const App: React.FC = () => {
               onChange={(e) => setAiInput(e.target.value)}
               placeholder="Describe what you want to do on the blockchain..."
             />
-            <button type="submit">Generate Calldata</button>
+            <button type="submit">Generate Transaction Data</button>
           </form>
 
-          {generatedCalldata && (
+          {generatedTxData && (
             <div className="result">
-              <p>To : {generatedTo}</p>
-              <p>Value: {generatedValue}</p>
-              <p>Calldata: {generatedCalldata}</p>
-              <p>EIP-7702: batch.sol</p>
-              <button onClick={() => handleConfirm(generatedCalldata)}>
+              <h3>Generated Transaction Data:</h3>
+              <div className="tx-fields">
+                <div className="tx-field">
+                  <label>To:</label>
+                  <pre className="field-value">{generatedTxData.to}</pre>
+                </div>
+                <div className="tx-field">
+                  <label>Value:</label>
+                  <pre className="field-value">{generatedTxData.value}</pre>
+                </div>
+                <div className="tx-field">
+                  <label>Calldata:</label>
+                  <pre className="field-value">{generatedTxData.calldata}</pre>
+                </div>
+                <div className="tx-field">
+                  <label>EIP-7702 Delegate:</label>
+                  <pre className="field-value">
+                    {generatedTxData.eip7702Delegate}
+                  </pre>
+                </div>
+              </div>
+              <button onClick={() => handleConfirm(generatedTxData)}>
                 Confirm Transaction
               </button>
             </div>

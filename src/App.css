@@ -7,6 +7,13 @@
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.5;
+  color: #333;
+}
+
+html,
+body {
+  height: 100%;
 }
 
 .App {
@@ -73,8 +80,46 @@ input {
 
 .result {
   margin-top: 20px;
-  padding: 10px;
+  padding: 15px;
   border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+}
+
+.result h3 {
+  margin-bottom: 15px;
+  font-size: 1.1em;
+  color: #333;
+}
+
+.tx-fields {
+  margin-bottom: 15px;
+}
+
+.tx-field {
+  margin-bottom: 10px;
+}
+
+.tx-field label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #555;
+}
+
+.field-value {
+  max-height: 100px; /* Limit height, scroll if longer */
+  overflow-x: auto; /* Horizontal scroll for long lines */
+  overflow-y: auto; /* Vertical scroll for many lines */
+  white-space: pre-wrap; /* Wrap long lines */
+  word-break: break-all; /* Break very long words */
+  padding: 8px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 0.9em;
+  color: #222;
 }
 
 .user-op {
@@ -86,4 +131,18 @@ input {
 
 .user-op h3 {
   margin-bottom: 10px;
+}
+
+.field {
+  margin-bottom: 15px;
+}
+
+.field label {
+  display: block;
+}
+
+.field .description {
+  font-size: 0.9em;
+  color: #666;
+  margin-bottom: 5px;
 }
