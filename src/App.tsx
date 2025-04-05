@@ -1,7 +1,8 @@
 // src/App.tsx
 import { useState } from "react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { useAccount, useSendTransaction } from "wagmi";
+import { useAccount, useSendTransaction, useClient } from "wagmi";
+import { GoogleGenAI } from "@google/genai";
 import "./App.css";
 
 type Mode = "ai" | "manual";
@@ -21,6 +22,8 @@ interface UserOperation {
   paymasterAndData: string; // Paymaster address and data
   signature?: string; // Signature of the UserOp
 }
+
+const ai = new GoogleGenAI({});
 
 // Field descriptions for display
 const userOpFields: {
@@ -103,16 +106,25 @@ const App: React.FC = () => {
   const [generatedValue, setValue] = useState<string>("");
   const { address, isConnected } = useAccount();
   const { sendTransaction } = useSendTransaction();
+  const client = useClient(); // Get the client
 
   const handleAISubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // FIXME call AI api here
-    const mockCalldata =
-      "0xa9059cbb0000000000000000000000009f885238277810fb5eec5a2601f2e19b8f875fa600000000000000000000000000000000000000000000000000000000000004d2";
-    setGeneratedCalldata(mockCalldata);
-    setTo("0xdAC17F958D2ee523a2206206994597C13D831ec7");
-    setValue("0");
+    const promp = `Assume on the EVM network ${client.chain.name}, generate EVM tx data (in json format, without any other text)(address and data should be in plain hex string format without any symbol like dash) to fullfill following intention: ${aiInput}`;
+    console.log(promp);
+    const response = await ai.models.generateContent({
+      model: "gemini-2.0-flash",
+      contents: promp,
+    });
+    let lines = response.text.split("\n");
+    lines = lines.slice(1, lines.length - 1);
+    let result = lines.join("\n");
+    console.log(result);
+    let resultJson = JSON.parse(result);
+    setGeneratedCalldata(resultJson.data);
+    setTo(resultJson.to);
+    setValue(resultJson.value);
   };
 
   const handleConfirm = async (calldata: string) => {
@@ -195,7 +207,7 @@ const App: React.FC = () => {
           onClick={() => setMode("ai")}
           className={mode === "ai" ? "active" : ""}
         >
-          AI Assistant Mode
+          Intelligent Mode
         </button>
         <button
           onClick={() => setMode("manual")}
@@ -220,7 +232,8 @@ const App: React.FC = () => {
             <div className="result">
               <p>To : {generatedTo}</p>
               <p>Value: {generatedValue}</p>
-              <p>Generated Calldata: {generatedCalldata}</p>
+              <p>Calldata: {generatedCalldata}</p>
+              <p>EIP-7702: batch.sol</p>
               <button onClick={() => handleConfirm(generatedCalldata)}>
                 Confirm Transaction
               </button>
