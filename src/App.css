@@ -1,4 +1,14 @@
-// src/App.css
+/* src/App.css */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
 .App {
   max-width: 800px;
   margin: 0 auto;
@@ -12,18 +22,25 @@ header {
   margin-bottom: 20px;
 }
 
-.mode-toggle {
+.wallet-connect {
+  display: inline-block;
+}
+
+.mode-toggle,
+.manual-type-toggle {
   margin-bottom: 20px;
 }
 
-.mode-toggle button {
+.mode-toggle button,
+.manual-type-toggle button {
   padding: 10px 20px;
   margin-right: 10px;
   border: none;
   cursor: pointer;
 }
 
-.mode-toggle button.active {
+.mode-toggle button.active,
+.manual-type-toggle button.active {
   background-color: #007bff;
   color: white;
 }
@@ -35,15 +52,22 @@ textarea {
   padding: 10px;
 }
 
-button {
+input {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 8px;
+}
+
+.App button:not(.rk-button) {
   padding: 10px 20px;
   background-color: #007bff;
   color: white;
   border: none;
   cursor: pointer;
+  margin-right: 10px;
 }
 
-button:hover {
+.App button:not(.rk-button):hover {
   background-color: #0056b3;
 }
 
@@ -51,4 +75,15 @@ button:hover {
   margin-top: 20px;
   padding: 10px;
   border: 1px solid #ccc;
+}
+
+.user-op {
+  border: 1px solid #eee;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 4px;
+}
+
+.user-op h3 {
+  margin-bottom: 10px;
 }
