@@ -4,6 +4,7 @@ import {
   mainnet,
   zircuitGarfieldTestnet,
   zircuit,
+  celo,
   polygon,
   optimism,
 } from "wagmi/chains";
@@ -11,5 +12,5 @@ import {
 export const config = getDefaultConfig({
   appName: "Twig",
   projectId: "51c7a03ad29fbe9db19e8dbaa78c877b",
-  chains: [mainnet, zircuitGarfieldTestnet, zircuit, polygon, optimism],
+  chains: [mainnet, zircuitGarfieldTestnet, zircuit, celo, polygon, optimism],
 });

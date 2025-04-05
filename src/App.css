@@ -42,14 +42,25 @@ header {
 .manual-type-toggle button {
   padding: 10px 20px;
   margin-right: 10px;
-  border: none;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f0f0f0;
+  color: #333;
   cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mode-toggle button:hover:not(.active),
+.manual-type-toggle button:hover:not(.active) {
+  background-color: #e0e0e0;
 }
 
 .mode-toggle button.active,
 .manual-type-toggle button.active {
-  background-color: #007bff;
-  color: white;
+  background-color: #28a745 !important; /* Green for selected */
+  color: white !important;
+  border: 2px solid #1e7e34 !important; /* Solid darker green border */
+  font-weight: bold;
 }
 
 textarea {
@@ -108,11 +119,11 @@ input {
 }
 
 .field-value {
-  max-height: 100px; /* Limit height, scroll if longer */
-  overflow-x: auto; /* Horizontal scroll for long lines */
-  overflow-y: auto; /* Vertical scroll for many lines */
-  white-space: pre-wrap; /* Wrap long lines */
-  word-break: break-all; /* Break very long words */
+  max-height: 100px;
+  overflow-x: auto;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  word-break: break-all;
   padding: 8px;
   background-color: #fff;
   border: 1px solid #ddd;
